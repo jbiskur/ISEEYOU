@@ -8,7 +8,7 @@ public class TestNetworkRules : NetworkBehaviour {
 	void Start () {
 	    if (isLocalPlayer)
         {
-            GetComponent<TestNetworkMovement>().enabled = true;
+            
         }
 	}
 }
