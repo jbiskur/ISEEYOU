@@ -10,6 +10,8 @@ public abstract class Trap : MonoBehaviour {
 			// TODO check for burglar
 			if (hitColliders[i] == GetComponent<Collider>())
 				continue;
+			if (!hitColliders[i].GetComponent<movement>())
+				continue;
 			return hitColliders[i].gameObject;
 		}
 
