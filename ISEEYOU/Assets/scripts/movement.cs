@@ -3,14 +3,18 @@ using System.Collections;
 
 public class movement : MonoBehaviour {
     MonoBehaviour unit;
+    public UnityStandardAssets.Characters.FirstPerson.FirstPersonController controller;
+    public bool lockMouse       = true;
+    private bool interacting    = false;
+    public bool MouseVisible    = true;
+    public bool GamePaused      = false;
+    public bool Crouching       = false;
+    public float CrouchSpeed    = 3f;
 
-    public bool lockMouse = true;
-    private bool interacting = false;
-    public bool MouseVisible = true;
-    public bool GamePaused = false;
     // Use this for initialization
     void Start () {
         unit = (GetComponent("FirstPersonController") as MonoBehaviour);
+        controller = GameObject.FindObjectOfType<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
     }
 
     void FixedUpdate() {
@@ -25,22 +29,37 @@ public class movement : MonoBehaviour {
             Cursor.visible = true;
             unit.enabled = false;
 
-            //finnist sikkurt ein betri loysn.
-            //set músuna í miðuna á skýggjanum
-            /*
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.lockState = CursorLockMode.None;
-            */
-
+            //SET KOTU FYRI PAUSU HER!
         }
         else {
             unit.enabled = true;
         }
     }
 
+    public void Crouch(bool pos) {
+        Crouching = pos;
+        controller.m_WalkSpeed =3f;
+
+        if (pos) {
+            transform.localScale = new Vector3(1f, 0.5f, 1f);
+        }
+        else { 
+            transform.localScale = new Vector3(1f, 1f, 1f);
+        }
+        
+        
+    }
+
+
     // Update is called once per frame
     void Update () {
-
+        //toggle Pause menu
+        if (Input.GetKeyDown(KeyCode.LeftControl) && !Crouching) {
+            Crouch(true);
+        }
+        else if(Input.GetKeyUp(KeyCode.LeftControl) && Crouching) {
+            Crouch(false);
+        }
 
         //toggle Pause menu
         if (Input.GetKeyDown(KeyCode.Escape)) {
