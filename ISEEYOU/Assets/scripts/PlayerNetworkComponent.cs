@@ -15,7 +15,10 @@ public class PlayerNetworkComponent : NetworkBehaviour {
         playerTransform = transform;
 	    if (isLocalPlayer)
         {
-            GetComponent<TestNetworkMovement>().enabled = true;
+            GetComponent<movement>().enabled = true;
+            GetComponent<CharacterController>().enabled = true;
+            GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().enabled = true;
+            transform.Find("FirstPersonCamera").gameObject.SetActive(true);
 
             StartCoroutine(SyncPlayerPosition());
         }
@@ -29,13 +32,14 @@ public class PlayerNetworkComponent : NetworkBehaviour {
         }
 
         playerTransform.position = Vector3.Lerp(playerTransform.position, position, Time.deltaTime * smoothRate);
+        //transform.position = playerTransform.position;
     }
 
     IEnumerator SyncPlayerPosition()
     {
         while (enabled)
         {
-            CmdUpdatePosition(position);
+            CmdUpdatePosition(transform.position);
             yield return new WaitForSeconds(updateTimer);
         }
     }
